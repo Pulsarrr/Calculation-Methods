@@ -1,6 +1,8 @@
 clc
 clear variables;
 close all force;
+clf
+
 
 %_____________\\\Initialisation///___________%
 a=0;
