@@ -1,1 +1,14 @@
 clc
+clear variables;
+close all force;
+
+%_____________\\\Initialisation///___________%
+a=0;
+b=1;
+Na=8;
+Nb=10*Na;
+x1=(a:(Na-1):b);
+x0=(a:(Nb-1):b);
+N1=length(x1);
+N0=length(x0);
+
