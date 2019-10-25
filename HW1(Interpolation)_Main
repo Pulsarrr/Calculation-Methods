@@ -23,17 +23,17 @@ fprintf("80 экспериментальных значений\n");
 f0=experimental_interpolation(w, x0);
 
 fprintf("80 значений методом ближайшего соседа\n");
-[f2, x0]=HW1_nearest_neightbour_interpolation(f1, x1, x0)
+[f2, x0]=HW1_nearest_neightbour_interpolation(f1, x1, x0);
 fprintf("80 значений методом линейной интерполяции\n");
-% f3=linear_interpolation(w, x1, x0);
+[f3, x0]=HW1_linear_interpolation(f1, x1, x0)
 fprintf("80 значений методом интерполяции Лагранжа\n");
-% f4=Lagrange_interpolation(w, x1, x0);
+% [f4, x0]=HW1_Lagrange_interpolation(f1, x1, x0);
 fprintf("80 значений методом Ньютона вперед\n");
-% f5=Newton_forward_interpolation(w, x1, x0);
+% [f5, x0]=HW1_Newton_forward_interpolation(f1, x1, x0);
 fprintf("80 значений методом Ньютона назад\n");
-% f6=Newton_backward_interpolation(w, x1, x0);
+% [f6, x0]=HW1_Newton_backward_interpolation(f1, x1, x0);
 fprintf("80 значений методом кубических сплайнов\n");
-% f7=cube_spline_interpolation(w, x1, x0);
+% [f7, x0]=HW1_cube_spline_interpolation(f1, x1, x0);
 %==================================================%
 
 
@@ -41,4 +41,3 @@ fprintf("80 значений методом кубических сплайно�
 function [f] = experimental_interpolation(w, x)
     f=sin(w*x);
 end
-
