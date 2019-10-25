@@ -11,4 +11,12 @@ x1=(a:(Na-1):b);
 x0=(a:(Nb-1):b);
 N1=length(x1);
 N0=length(x0);
+w=2*pi*1;
+
+
+%_____________\\\Functions///_______________%
+function [f] = main_sin(w, x)
+    f=sin(w*x);
+end
+
 
