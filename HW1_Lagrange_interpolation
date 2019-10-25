@@ -1,15 +1,16 @@
 function[f4, x0] = HW1_Lagrange_interpolation(f1, x1, x0)
     f4=zeros(length(x0), 1);
-    I=zeros(length(x1)+1, 1);
-    L=zeros(length(x1)+1, 1);
-%    k=1;
-    for k=(0:1:length(x1)+1)
-        for i=(1:1:length(x1))
-            if i~=k
-                I(k)=I(k)*((x0(i)-x1(i))/(x1(i)-x1(k)));
+    for j=(1:1:length(x0))
+        L=0;
+        for k=(0:1:length(x1))
+            I=1;
+            for i=(0:1:length(x1))
+                if i~=k
+                    I = I*((x0(j)-x1(i))/(x1(k)-x1(i)));
+                end
             end
+            L = L+f1(k)*I;
         end
-        L(k)=L(k)+f1(k)*I(k);
-        f4(k)=L(k);
+        f4(j)=L;
     end
 end
