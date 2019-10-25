@@ -1,41 +1,37 @@
 clc
 clear variables;
 close all force;
-clf
-
 
 %_____________\\\Initialisation///___________%
 a=0;
 b=1;
 Na=8;
 Nb=10*Na;
-x1=(a:(Na-1):b);
-x0=(a:(Nb-1):b);
+x1=(a:((b-a)/(Na-1)):b)';
+x0=(a:((b-a)/(Nb-1)):b)';
 N1=length(x1);
 N0=length(x0);
 w=2*pi*1;
+%============================================%
 
 
 
-%____________\\\Functions calls///__________%
-f1=main_sin(w, x1, Na);
-f0=main_sin(w, x0, Nb);
+%____________\\\Functions calls///_________________%
+f1=experimental_interpolation(w, x1);
+f0=experimental_interpolation(w, x0);
 
-f2=nearest_neightbour_interpolation(w, x1, x0);
-f3=linear_interpolation(w, x1, x0);
-f4=Lagrange_interpolation(w, x1, x0);
-f5=Newton_forward_interpolation(w, x1, x0)
-f6=Newton_backward_interpolation(w, x1, x0)
-f7=cube_spline_interpolation(w, x1, x0)
-
+% f2=nearest_neightbour_interpolation(w, x1, x0);
+% f3=linear_interpolation(w, x1, x0);
+% f4=Lagrange_interpolation(w, x1, x0);
+% f5=Newton_forward_interpolation(w, x1, x0);
+% f6=Newton_backward_interpolation(w, x1, x0);
+% f7=cube_spline_interpolation(w, x1, x0);
+%==================================================%
 
 
 %_____________\\\Functions///_______________%
-function [f] = main_sin(w, x, N)
-%ввести вместо значения х вектор значений х
-for i=(1:1:N)
-    f=sin(w*x(i));
-end
+function [f] = experimental_interpolation(w, x)
+    f=sin(w*x);
 end
 
 
