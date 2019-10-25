@@ -16,8 +16,8 @@ w=2*pi*1;
 
 
 %____________\\\Functions calls///__________%
-f1=main_sin(w, x1);
-f0=main_sin(w, x0);
+f1=main_sin(w, x1, Na);
+f0=main_sin(w, x0, Nb);
 
 f2=nearest_neightbour_interpolation(w, x1, x0);
 f3=linear_interpolation(w, x1, x0);
@@ -29,8 +29,11 @@ f7=cube_spline_interpolation(w, x1, x0)
 
 
 %_____________\\\Functions///_______________%
-function [f] = main_sin(w, x)
-    f=sin(w*x);
+function [f] = main_sin(w, x, N)
+%ввести вместо значения х вектор значений х
+for i=(1:1:N)
+    f=sin(w*x(i));
+end
 end
 
 
