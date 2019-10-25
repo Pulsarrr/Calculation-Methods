@@ -14,6 +14,20 @@ N0=length(x0);
 w=2*pi*1;
 
 
+
+%____________\\\Functions calls///__________%
+f1=main_sin(w, x1);
+f0=main_sin(w, x0);
+
+f2=nearest_neightbour_interpolation(w, x1, x0);
+f3=linear_interpolation(w, x1, x0);
+f4=Lagrange_interpolation(w, x1, x0);
+f5=Newton_forward_interpolation(w, x1, x0)
+f6=Newton_backward_interpolation(w, x1, x0)
+f7=cube_spline_interpolation(w, x1, x0)
+
+
+
 %_____________\\\Functions///_______________%
 function [f] = main_sin(w, x)
     f=sin(w*x);
