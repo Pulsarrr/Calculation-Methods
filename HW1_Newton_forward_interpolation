@@ -1,16 +1,29 @@
-function[f4, x0] = HW1_Lagrange_interpolation(f1, x1, x0)
-    f4=zeros(length(x0), 1);
-    for j=(1:1:length(x0))
-        L=0;
-        for k=(1:1:length(x1))
-            I=1;
-            for i=(1:1:length(x1))
-                if i~=k
-                    I = I*((x0(j)-x1(i))/(x1(k)-x1(i)));
-                end
-            end
-            L = L+f1(k)*I;
+function[f5, x0] = HW1_Newton_forward_interpolation(f1, x1, x0)
+    N1=8;
+    f5=zeros(length(x0), 1);
+    d=zeros(length(x1), N1);
+
+%__________________\\\Finite differences calculation///__________________%
+    d(:,1)=f1(:);
+    for i=(2:1:N1)
+        for j=(1:1:N1+1-i)
+        d(j,i)=d(j+1,i-1)-d(j,i-1); 
         end
-        f4(j)=L;
+    end
+%=======================================================================%
+
+
+    h=x1(2)-x1(1);
+    for i=(1:1:length(x0))
+        q=(x0(i)-x1(1))/h;
+        fact=1;
+        Q=1;
+        P=0;
+        for k=(1:1:N1-1)
+            fact=k*fact;
+            Q=Q*(q-k+1);
+            P = P+(Q/fact)*d(1, k+1);
+        end
+        f5(i)=P; 
     end
 end
