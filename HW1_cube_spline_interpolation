@@ -1,1 +1,8 @@
+function[f7, x0]=HW1_cube_spline_interpolation(f1 ,x1, x0)
+    K1=0;
+    L1=0;
+    
+
+
+end
 
