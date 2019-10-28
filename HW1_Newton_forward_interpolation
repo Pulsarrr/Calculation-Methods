@@ -1,5 +1,5 @@
 function[f5, x0] = HW1_Newton_forward_interpolation(f1, x1, x0)
-    N1=8;
+    N1=9;
     f5=zeros(length(x0), 1);
     d=zeros(length(x1), N1);
 
@@ -21,7 +21,7 @@ function[f5, x0] = HW1_Newton_forward_interpolation(f1, x1, x0)
         P=0;
         for k=(1:1:N1-1)
             fact=k*fact;
-            Q=Q*(q-k+1);
+            Q = Q*(q-k+1);
             P = P+(Q/fact)*d(1, k+1);
         end
         f5(i)=P; 
