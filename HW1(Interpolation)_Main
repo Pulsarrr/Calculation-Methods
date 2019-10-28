@@ -33,7 +33,7 @@ fprintf("80 значений методом Ньютона вперед\n");
 fprintf("80 значений методом Ньютона назад\n")
 [f6, x0]=HW1_Newton_backward_interpolation(f1, x1, x0);
 fprintf("80 значений методом кубических сплайнов\n");
-%[f7, x0]=HW1_cube_spline_interpolation(f1, x1, x0)
+[f7, x0]=HW1_cube_spline_interpolation(f1, x1, x0)
 %==================================================%
 
 
@@ -74,3 +74,4 @@ function [f] = experimental_interpolation(w, x)
     f=sin(w*x);
 end
 %===========================================%
+
