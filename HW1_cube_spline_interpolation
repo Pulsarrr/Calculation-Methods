@@ -1,28 +1,22 @@
 function[f7, x0]=HW1_cube_spline_interpolation(f1 ,x1, x0)
-%a, b, c, d, K, L, F, V, S-vectora
     f7=zeros(length(x0), 1);
     S=zeros(length(x0), 1);
-    N1=8;
-    K=zeros(N1);
-    L=zeros(N1);
-    a=zeros(N1);
-    b=zeros(N1);
-    c=zeros(N1+1);
-    d=zeros(N1);
-    h=zeros(N1);
-    K(1)=0;
-    L(1)=0;
-    c(1)=0;
-    c(N1+1)=0;
-    
+    N1=9;%%%%%%%%%%%%%%%%%%
+    K=zeros(N1, 1);
+    L=zeros(N1, 1);
+    a=zeros(N1, 1);
+    b=zeros(N1, 1);
+    c=zeros(N1+1, 1);
+    d=zeros(N1, 1);
+
     
     for k=(3:1:N1)
-        h(k)=f1(k)-f1(k-1);
-        h(k-1)=f1(k-1)-f1(k-2);
-        Fk=3*(((f1(k)-f1(k-1))/h(k))-(f1(k-1)-f1(k-2))/h(k-1));
-        Vk=2*(h(k)+h(k-1));
-        K(k)=(Fk-h(k-1)*K(k-1))/(Vk-h(k-1)*L(k-1));
-        L(k)=h(k)/(Vk-h(k-1)*L(k-1));
+        H=x1(k)-x1(k-1);
+        h=x1(k-1)-x1(k-2);
+        Fk=3*(((f1(k)-f1(k-1))/H)-(f1(k-1)-f1(k-2))/h);
+        Vk=2*(H+h);
+        K(k)=(Fk-h*K(k-1))/(Vk-h*L(k-1));
+        L(k)=H/(Vk-h*L(k-1));
     end
     
     
@@ -32,16 +26,19 @@ function[f7, x0]=HW1_cube_spline_interpolation(f1 ,x1, x0)
     
     
     for k=(2:1:N1)
-       d(k)=(c(k+1)-c(k))/3*h(k);
-       b(k)=(f1(k)-f1(k-1))/(h(k)) - c(k)*h(k) - d(k)*h(k)*h(k);
+       H=x1(k)-x1(k-1);
+       d(k)=(c(k+1)-c(k))/3*H;
+       b(k)=(f1(k)-f1(k-1))/(H) - c(k)*H - d(k)*H^2;
        a(k)=f1(k-1);
     end
     
-    
+    k=2;
     for i=(1:1:length(x0))
-        
-        
-        S(i)=a(k)+b(k)*h(k)+c(k)*h(k)*h(k)+d(k)*h(k)*h(k)*h(k);
+        if x0(i)>x1(k)
+            k=k+1;
+        end
+        H=x0(i)-x1(k-1);
+        S(i)=a(k)+b(k)*H+c(k)*H^2+d(k)*H^3;
         f7(i)=S(i);
     end
 end
