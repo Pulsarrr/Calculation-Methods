@@ -1,16 +1,16 @@
 function[f7, x0]=HW1_cube_spline_interpolation(f1 ,x1, x0)
     f7=zeros(length(x0), 1);
     S=zeros(length(x0), 1);
-    N1=9;%%%%%%%%%%%%%%%%%%
-    K=zeros(N1, 1);
-    L=zeros(N1, 1);
-    a=zeros(N1, 1);
-    b=zeros(N1, 1);
-    c=zeros(N1+1, 1);
-    d=zeros(N1, 1);
+    %N1=9;%-DONE
+    K=zeros(length(x1), 1);
+    L=zeros(length(x1), 1);
+    a=zeros(length(x1), 1);
+    b=zeros(length(x1), 1);
+    c=zeros(length(x1)+1, 1);
+    d=zeros(length(x1), 1);
 
     
-    for k=(3:1:N1)
+    for k=(3:1:length(x1))
         H=x1(k)-x1(k-1);
         h=x1(k-1)-x1(k-2);
         Fk=3*(((f1(k)-f1(k-1))/H)-(f1(k-1)-f1(k-2))/h);
@@ -20,12 +20,12 @@ function[f7, x0]=HW1_cube_spline_interpolation(f1 ,x1, x0)
     end
     
     
-    for k=(N1:-1:2)
+    for k=(length(x1):-1:2)
       c(k)=K(k)-L(k)*c(k+1); 
     end
     
     
-    for k=(2:1:N1)
+    for k=(2:1:length(x1))
        H=x1(k)-x1(k-1);
        d(k)=(c(k+1)-c(k))/3*H;
        b(k)=(f1(k)-f1(k-1))/(H) - c(k)*H - d(k)*H^2;
