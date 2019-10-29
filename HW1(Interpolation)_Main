@@ -51,7 +51,9 @@ stem(x0, f0, 'diamond', 'blue');
 grid on
 grid minor
 legend('Nearest neightbour interpolation(stairs)', 'Linear interpolation', 'Lagrange interpolation', 'f1(stem)', 'f0(stem)');
-xlabel('Interpolation methods(Nearest neightbour, linear & Lagrange)');
+title('Interpolation methods(Nearest neightbour, linear & Lagrange)');
+xlabel('X');
+ylabel('F(x)');
 
 
 subplot(2, 1, 2);
@@ -65,7 +67,9 @@ axis([0 1 -1 1]);
 grid on;
 grid minor;
 legend('Newton forward interpolation', 'Newton backward interpolation', 'Cube spline interpolation', 'f1(stem)', 'f0(stem)');
-xlabel('Interpolation methods(Newton forward, Newton backward & cube spline)');
+title('Interpolation methods(Newton forward, Newton backward & cube spline)');
+xlabel('X');
+ylabel('F(x)');
 %=============================================%
 
 
