@@ -1,28 +1,33 @@
-function[f6, x0] = HW1_Newton_backward_interpolation(f1, x1, x0)
+function[f5, x0] = HW1_Newton_forward_interpolation(f1, x1, x0)
     N1=9;
-    f6=zeros(length(x0), 1);
+    f5=zeros(length(x0), 1);
     d=zeros(length(x1), N1);
-    
-%____________________Finite differences calculation___________________%
+
+%__________________\\\Finite differences calculation///__________________%
     d(:, 1)=f1(:);
+    j=length(x1);
     for i=(2:1:N1)
-        for j=(i:1:N1)
-            d(j, i)=d(j, i-1)-d(j-1, i-1);
-        end
+        L=(j:-1:2);
+        d(L-1, i) = d(L, i-1)-d(L-1, i-1);
+        j=j-1;
+%        for j=(1:1:N1+1-i)
+%           d(j, i)=d(j+1, i-1)-d(j, i-1); 
+%        end
     end
-%===================================================================%
-    
-    h=x1(N1)-x1(N1-1);
+%========================================================================%
+
+
+    h=x1(2)-x1(1);
     for i=(1:1:length(x0))
+        q=(x0(i)-x1(1))/h;
         fact=1;
         Q=1;
-        P=f1(N1);
-        q=(x0(i)-x1(N1))/h;
+        P=0;
         for k=(1:1:N1-1)
             fact=k*fact;
-            Q=Q*(q+k-1);
-            P = P+(Q/fact)*d(N1, k+1);
+            Q = Q*(q-k+1);
+            P = P+(Q/fact)*d(1, k+1);
         end
-       f6(i)=P; 
+        f5(i)=P; 
     end
 end
