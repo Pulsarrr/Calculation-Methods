@@ -46,8 +46,8 @@ hold on;
 stairs(x0, f2);
 plot(x0, f3);
 plot(x0, f4);
-stem(x1, f1, 'diamond');
-stem(x0, f0, 'diamond', 'blue');
+stem(x0, f0, 'diamond', 'magenta');
+stem(x1, f1, 'diamond', 'blue');
 grid on
 grid minor
 legend('Nearest neightbour interpolation(stairs)', 'Linear interpolation', 'Lagrange interpolation', 'f1(stem)', 'f0(stem)');
@@ -61,8 +61,8 @@ hold on;
 plot(x0, f5);
 plot(x0, f6);
 plot(x0, f7);
-stem(x1, f1, 'diamond');
 stem(x0, f0, 'diamond', 'blue');
+stem(x1, f1, 'diamond', 'magenta');
 axis([0 1 -1 1]);
 grid on;
 grid minor;
