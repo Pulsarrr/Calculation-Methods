@@ -1,0 +1,15 @@
+function [f2, x0] = HW1_nearest_neightbour_interpolation(f1, x1, x0)
+    f2=zeros(length(x0), 1);
+    k=1;
+    kMax=length(x1);%-DONE
+    for i=(1:1:length(x0))
+        if k~=kMax
+            d1=abs(x0(i)-x1(k));
+            d2=abs(x0(i)-x1(k+1));
+            if d2<=d1
+                k=k+1;
+            end
+        end
+        f2(i)=f1(k);
+    end
+end
