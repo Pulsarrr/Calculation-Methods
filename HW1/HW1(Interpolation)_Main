@@ -1,0 +1,81 @@
+clc
+clear variables;
+close all force;
+
+%_____________\\\Initialisation///___________%
+a=0;
+b=1;
+Na=8;
+Nb=10*Na;
+x1=(a:((b-a)/(Na)):b)';
+x0=(a:((b-a)/(Nb)):b)';
+N1=length(x1);%N1=9
+N0=length(x0);%N0=81
+w=2*pi*1;
+%============================================%
+
+
+
+%_______________________\\\Functions calls///_______________________%
+fprintf("8 экспериментальных значений\n");
+f1=experimental_interpolation(w, x1)
+fprintf("80 экспериментальных значений\n");
+f0=experimental_interpolation(w, x0)
+
+fprintf("80 значений методом ближайшего соседа\n");
+[f2, x0]=HW1_nearest_neightbour_interpolation(f1, x1, x0)
+fprintf("80 значений методом линейной интерполяции\n");
+[f3, x0]=HW1_linear_interpolation(f1, x1, x0)
+fprintf("80 значений методом интерполяции Лагранжа\n");
+[f4, x0]=HW1_Lagrange_interpolation(f1, x1, x0)
+fprintf("80 значений методом Ньютона вперед\n");
+[f5, x0]=HW1_Newton_forward_interpolation(f1, x1, x0)
+fprintf("80 значений методом Ньютона назад\n");
+[f6, x0]=HW1_Newton_backward_interpolation(f1, x1, x0)
+fprintf("80 значений методом кубических сплайнов\n");
+[f7, x0]=HW1_cube_spline_interpolation(f1, x1, x0)
+%=================================================================%
+
+
+
+%___________________________\\\Graphics///_______________________________%
+figure(1);
+clf;
+subplot(2, 1, 1);
+hold on;
+stairs(x0, f2);
+plot(x0, f3);
+plot(x0, f4);
+stem(x0, f0, 'diamond', 'magenta');
+stem(x1, f1, 'diamond', 'blue');
+grid on
+grid minor
+legend('Nearest neightbour interpolation(stairs)', 'Linear interpolation', 'Lagrange interpolation', 'f1(stem)', 'f0(stem)');
+title('Interpolation methods(Nearest neightbour, linear & Lagrange)');
+xlabel('X');
+ylabel('F(x)');
+
+
+subplot(2, 1, 2);
+hold on;
+plot(x0, f5);
+plot(x0, f6);
+plot(x0, f7);
+stem(x0, f0, 'diamond', 'blue');
+stem(x1, f1, 'diamond', 'magenta');
+axis([0 1 -1 1]);
+grid on;
+grid minor;
+legend('Newton forward interpolation', 'Newton backward interpolation', 'Cube spline interpolation', 'f1(stem)', 'f0(stem)');
+title('Interpolation methods(Newton forward, Newton backward & cube spline)');
+xlabel('X');
+ylabel('F(x)');
+%==========================================================================%
+
+
+
+%_________________\\\Function///___________________%
+function [f] = experimental_interpolation(w, x)
+    f=sin(w.*x);
+end
+%==============================================%
