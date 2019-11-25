@@ -1,1 +1,27 @@
+clc
+clear variables
+close all force
+
+
+%---------Initialisation---------%
+w=4;%Hz
+omega=2*pi*w;
+a=0.7;
+b=1.5;
+eps=1e-6;
+n=[10; 100; 1000]';
+N=zeros(3, 7);
+
+
+%---------Functions---------%
+function[f] = hw_int_func(t)
+    w=4;%Hz
+    omega=2*pi*w;
+    f = 1.16*t + 0.13*sin(omega*t) - 0.89*t^2;
+end
+
+
+function[I] = hw_int_analog(fnc, a, b, n, method)
+    I = fnc
+end
 
