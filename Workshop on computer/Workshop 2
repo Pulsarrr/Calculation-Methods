@@ -1,0 +1,250 @@
+clc;
+clear variables;
+close all force;
+
+%=================input arguments==================%
+w0=10;
+xi=0.7;
+%__________________________________________________%
+
+
+%=================transport functions===============%
+s=tf('s');
+%tf - transport function/peredatochnaya funkciya
+w1 = w0^2 / (s^2 + 2*xi*w0*s + w0^2);
+w2 = tf([100], [1, 2*xi*w0, w0^2]);
+w3 = tf(w0^2, [1, 14, 100]);
+%___________________________________________________%
+
+
+p = pole(w2)%opredelenie polusov funkcii
+[z, k] = zero(w2);
+w3 = zpk(z, p, k);
+%%
+
+%%
+sys2 = ss(w1)
+
+%n-koefficient polinoma chislitelya
+%d-koefficient polinoma znamenatelya
+[n, d] = tfdata(w2)
+
+n=n(1)
+
+d=d(1)
+
+[A, B, C, D] = tf2ss(n, d)
+sys3 = ss(A, B, C, D)%opisanie sistemi v peremennih sostoyaniya
+%%
+
+%%
+figure(1)
+clf
+step(w1)
+
+clc
+[y, t]=step(w1, 1);
+figure(2)
+clf;
+    plot(t, y, 'LineWidth', 2.0);
+    grid on;
+    grid minor;
+%oba grafika eto odno i tozhe, no figure 2 bolee pravilnii variant
+%%
+
+%%
+%eto eshe bolee vernii variant grafica
+t = (0.0 : 0.01 : 2.0)';%stupen' s zaderzhkoi v 1 secundu    
+u = zeros(size(t));
+u(t>-1) = 1;
+[y, t] = lsim(w1, u, t)
+
+figure(3)
+clf;
+    stairs(t, u);
+    hold on;
+    plot(t, y, 'LineWidth', 2.0);
+    hold off;
+    grid on;
+    grid minor;
+    legend({'u', 'y'}, 'Location', 'Best')
+%%
+
+
+%%
+%postroenie impulsnoi perehodnoi harakteristiki, figure 4 ne samii luchii variant
+figure(4);
+clf
+impulse(w1);
+    
+%etot variant luche
+[y, t] = impulse(w1, 1);
+figure(5)
+clf;
+    plot(t, y, 'LineWidth', 2.0);
+    grid on;
+    grid minor;
+
+    
+    
+t=(0.0 : 0.01 : 2.0)';
+u = zeros(size(t));
+ind = find(t>=1, 1);
+u(ind) = 1;
+[y, t] = lsim(w1, u, t)
+
+%figure 6 - variant nailuchii
+figure(6)
+clf;
+    stem(t, u);
+    hold on;
+    plot(t, y, 'LineWidth', 2.0);
+    hold off;
+    grid on;
+    grid minor;
+    legend({'u', 'y'}, 'Location', 'Best');
+%%
+
+
+%%
+t=(0.0 : 0.01 : 2.0)';
+u = zeros(size(t));
+ind = find(t>=1, 1);
+u(ind) = 1;
+[y, t] = lsim(w1, u, t)
+
+figure(7)
+clf;
+    stem(t, u);
+    hold on;
+    plot(t, y, 'LineWidth', 2.0);
+    hold off;
+    grid on;
+    grid minor;
+
+    
+    
+%postroenie reakcii sistemi na signal    
+t=(0.0 : 0.01 : 2.0)';
+u = sin(2*pi*2.*t);
+[y, t] = lsim(w1, u, t)
+
+figure(8)
+clf;
+    plot(t, u);
+    hold on;
+    plot(t, y, 'LineWidth', 2.0);
+    hold off
+    grid on;
+    grid minor;
+    legend({'u', 'y'}, 'Location', 'Best')
+%%    
+  
+
+
+
+%%
+%postroenie ЛАЧХ i ЛФЧХ ili diagrammi Bode
+%figure 9 eto ne samii luchii variant
+figure(9)
+clf;
+bode(w1)
+
+
+f = logspace(-2, 2, 1000);
+[mag, pha] = bode(w1, f*2*pi);%diagramma Bode
+m = squeeze(mag);%squeeze tol'ko dlya skalyarnoi sistemi
+m = mag2db(m);%perehod iz absolutnih velichin v decibelli
+p = squeeze(pha);
+
+%figure 10 eto sposob luche
+figure(10)
+clf;
+    subplot(2, 1, 1)
+    semilogx(f, m, 'LineWidth', 2.0)
+    grid on;
+    grid minor;
+    title('ЛАЧХ')
+    xlabel('Частота, Гц')
+    
+    subplot(2, 1, 2)
+    semilogx(f, p, 'LineWidth', 2.0)
+    grid on;
+    grid minor;
+    title('ЛФЧХ')
+    xlabel('Частота, Гц')
+
+    
+    
+f = logspace(-2, 2, 1000);
+H = freqresp(w1, f*2*pi);
+H = squeeze(H);
+m = mag2db(abs(H));
+%ili
+m = 20*log10(abs(H));
+p = angle(H);
+%ili
+p = atan2(imag(H), real(H));
+p = rad2deg(p);%perevod iz radian v gradusi
+
+%eto nailuchii variant postroeniya
+figure(11)
+    subplot(2, 1, 1)
+    semilogx(f, m, 'LineWidth', 2.0)
+    grid on;
+    grid minor;
+    title('ЛАЧХ')
+    xlabel('Частота, Гц')
+    
+    subplot(2, 1, 2)
+    semilogx(f, p, 'LineWidth', 2.0)
+    grid on;
+    grid minor;
+    title('ЛАЧХ')
+    xlabel('Частота, Гц')
+%%
+    
+    
+    
+%%
+ %postroenie АФЧХ ili godograf Naikvista
+ %samii hudshii variant
+ figure(12)
+ clf;
+ nyquist(w1)
+ 
+ %variant poluche
+ f = logspace(-2, 2, 100);
+ H = freqresp(w1, f*2*pi);
+ H = squeeze(H);
+ re = real(H);
+ im = imag(H);
+ 
+ figure(13)
+ clf;
+    plot(re, im, '-*', 'LineWidth', 2.0);
+    hold on;
+    plot(re, -im, '-*', 'LineWidth', 2.0);
+    hold off;
+    grid on;
+    grid minor;
+    title('Годограф Найквиста')
+    xlabel('Re')
+    ylabel('Im')
+%%    
+    
+
+    
+%%
+%chislennoe reshenie zadachi Koshi
+T = (0.0 : 0.01 : 1.0)';
+syms s
+F = 100/s/(s^2 + 14*s + 100)
+XT = ilaplace(F, 's', 't')
+XT = vpa(XT, 10);
+XT = subs(XT, 't', T)
+XT = eval(XT)
+
+figure(14)
+clf;
+    plot(T, XT)
