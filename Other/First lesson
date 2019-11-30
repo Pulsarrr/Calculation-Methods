@@ -1,0 +1,123 @@
+clc
+clf
+clear variables
+close all force
+
+s1=1
+size(s1)
+
+a=[1,2,3,4;5,6,7,8]
+size(a)
+%%
+f=[1;1;1;1;1];
+disp(f);
+fprintf("")
+%%
+b=5;%double
+g=uint32(8)%integer g=8
+
+eye(5,5)%edinichnaya matr
+ones(4,4)%matr edinic
+
+c=ones(1,2,3,4,5,6)%6-mernyi massiv iz edinic
+%%
+A=ones(3,5)
+B=A'%transponirovanie
+%%
+C=randn(3)
+C^(-1)%obratn matr
+inv(C)%obratn matr
+
+dot(A,A)%skalyarnoe proizv
+cross(A,A)%vektorn proizv
+%%
+
+B=[1,2,3;7,5,6]
+B(4)%vivod 4 elementa
+B(2:4)%s 2 elementa po 4
+
+B(:, 1:2)
+B(:, 1:2)=[]%udalenie 1 i 2 stolbca po vsem strochkam
+%%
+
+A=randn(5)
+C=A>0%gde A>0 tam 1 a gde A<0 tam 0
+A(C>0)=100%esli element A>0 to on stanovitsya raven 100
+
+expe(A)%matr exponenta
+min(A)%minimalnoe znach v kazdoi strochke A
+
+eig(A)%sobstvennie znach matr
+[m,n]=eig(A)%sobstv vektora matr
+%%
+
+a=5;
+if a>0
+    fprintf(">\n");
+elseif a==0
+    fprintf("0");
+else
+    fprintf("<\n");
+end
+%%
+
+switch a
+    case 0
+        fprintf("");
+    case 1
+        
+    case 2
+        
+    otherwise
+        
+end
+%%
+
+for i=1:1:10
+    disp(i);
+end
+%%
+
+i=1;
+while i<=10
+    disp(i);
+    i=i+1;
+end
+%%
+
+a="sfdavsg"
+b='dsAFAF'
+b(1:3)
+b(2:end-3)
+%%
+
+save('file.mat')%sohranenie peremennih
+%%
+
+st.a=1;
+st.b='gfdsg'
+C=cell(5,1)
+C[1]=A;
+C[2]=B;
+C[3]=m;
+C[4]=st;
+
+C{1}%obrashenie k chislu
+C(1)%obrashenie k elementu
+%%
+
+
+function[m,s]=stat(x)
+    n=length(x);
+    m=sum(x)/n;
+    s=sqrt(sum((x-m).^2));
+end
+
+f=@(y,z) sqrt(sum((y-z).^2))
+s=f(y,z);%anonimnaya funkciya dolzhna bit v obichnoi funkcii
+%%
+clc
+x=[1,2,3]
+a=[x;x]
+%%
+
