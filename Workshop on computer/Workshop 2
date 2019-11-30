@@ -248,3 +248,65 @@ XT = eval(XT)
 figure(14)
 clf;
     plot(T, XT)
+    
+    
+    
+%%
+%Simulink
+clc
+open('System');
+%Parametri modeli
+get_param('System', 'ObjectParameters')
+get_param('System', 'SolverType')
+get_param('System', 'FixedStep')
+get_param('System', 'StartTime')
+get_param('System', 'StopTime')
+
+%Ustanavlivaem parametri modeli(ne samii luchii)
+set_param('System', 'SolverType', 'Fixed-st')
+set_param('System', 'FixedStep', '1e-2')
+set_param('System', 'StartTime', '0')
+set_param('System', 'StopTime', '10.0')
+
+%Ustanavlivaem parametri peredatochnoi funkcii(variant poluchshe)
+set_param('System/System', 'Numerator', '[100]')
+set_param('System/System', ...
+    'Denominator', '[1 14 100]')
+
+%Ustanavlivaem parametri peredatochnoi funkcii(variant eshe luchshe)
+set_param('System/System', ...
+    'Numerator', '[w0^2]');
+set_param('System/System', ...
+    'Denominator', '[1, 2*xi*w0, w0^2]');
+
+set_param('System/Pulse Generator', 'Period', '4.0')
+set_param('System/Pulse Generator', 'PulseWidth', '50');
+set_param('System/Pulse Generator', 'PhaseDelay', '2.5');
+
+%Sohranyaem izmeneniya v modeli
+save_system('System');
+
+%Zapuskaem modelirovanie
+RES = sim('System')
+
+%Sohranyaem vektor vremeni
+t = RES.tout;
+
+RES.yout
+RES.yout{1}
+RES.yout{1}.Values
+RES.yout{1}.Values.Data
+u = RES.yout{1}.Values.Data;
+y = RES.yout{2}.Values.Data;
+
+figure(15);
+clf;
+    stairs(t, u, 'LineWidth', 2.0);
+    hold on;
+    plot(t, y, 'LineWidth', 2.0);
+    hold off;
+    
+    grid on;
+    grid minor;
+    legend({'Выход системы', 'Входной сигнал'}, ...
+        'Location', 'NorthEast');
