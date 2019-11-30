@@ -29,9 +29,9 @@ sys2 = ss(w1)
 %d-koefficient polinoma znamenatelya
 [n, d] = tfdata(w2)
 
-n=n(1)
+n=n{1}
 
-d=d(1)
+d=d{1}
 
 [A, B, C, D] = tf2ss(n, d)
 sys3 = ss(A, B, C, D)%opisanie sistemi v peremennih sostoyaniya
