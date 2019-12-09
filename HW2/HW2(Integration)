@@ -35,10 +35,13 @@ x3 = (a : (b-a)/n(3) : b);
 [I] = hw_int_analog(@hw_int_func, a, b, n(1), 'Parabola method');
 [I] = hw_int_analog(@hw_int_func, a, b, n(2), 'Parabola method');
 [I] = hw_int_analog(@hw_int_func, a, b, n(3), 'Parabola method');
-[I] = hw_int_analog(@hw_int_func, a, b, n(1), 'Gauss-Legandre quadrature method')
+[I] = hw_int_analog(@hw_int_func, a, b, n(1), 'Gauss-Legandre quadrature method');
 [I] = hw_int_analog(@hw_int_func, a, b, n(2), 'Gauss-Legandre quadrature method');
 [I] = hw_int_analog(@hw_int_func, a, b, n(3), 'Gauss-Legandre quadrature method');
-%[I] = hw_int_analog(@hw_int_func, a, b, n, ' method')
+[I] = hw_int_analog(@hw_int_func, a, b, n(3), 'Gauss-Kronrod quadrature method')
+[I] = hw_int_analog(@hw_int_func, a, b, n(3), 'Gauss-Kronrod quadrature method');
+[I] = hw_int_analog(@hw_int_func, a, b, n(3), 'Gauss-Kronrod quadrature method');
+
 
 %========================================================%
 
@@ -105,6 +108,8 @@ switch k
             end
             I = I + ((x(k+1+shift)-x(k+shift))/2)*sum;
         end
+    case 'Gauss-Kronrod quadrature method'
+        
     end
 end
 %========================================================%
