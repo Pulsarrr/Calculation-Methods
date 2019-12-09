@@ -2,26 +2,89 @@ clc
 clear variables
 close all force
 
+%_______________________Initialisation___________________%
+omega=4;%Hz
+W = 2*pi*omega;
+a = 0.7;
+b = 1.5;
+eps = 1e-6;
+n = [10; 100; 1000]';
+N = zeros(3, 7);
+x1 = (a : (b-a)/n(1) : b); 
+x2 = (a : (b-a)/n(2) : b);
+x3 = (a : (b-a)/n(3) : b);
+%========================================================%
 
-%---------Initialisation---------%
-w=4;%Hz
-omega=2*pi*w;
-a=0.7;
-b=1.5;
-eps=1e-6;
-n=[10; 100; 1000]';
-N=zeros(3, 7);
+
+%____________________Functions calling___________________%
+[f1] = hw_int_func(x1);
+[f2] = hw_int_func(x2);
+[f3] = hw_int_func(x3);
+[I] = hw_int_analog(@hw_int_func, a, b, n(1), 'Left rectangle method');
+[I] = hw_int_analog(@hw_int_func, a, b, n(2), 'Left rectangle method');
+[I] = hw_int_analog(@hw_int_func, a, b, n(3), 'Left rectangle method');
+[I] = hw_int_analog(@hw_int_func, a, b, n(1), 'Right rectangle method');
+[I] = hw_int_analog(@hw_int_func, a, b, n(2), 'Right rectangle method');
+[I] = hw_int_analog(@hw_int_func, a, b, n(3), 'Right rectangle method');
+[I] = hw_int_analog(@hw_int_func, a, b, n(1), 'Central rectangle method');
+[I] = hw_int_analog(@hw_int_func, a, b, n(2), 'Central rectangle method');
+[I] = hw_int_analog(@hw_int_func, a, b, n(3), 'Central rectangle method');
+[I] = hw_int_analog(@hw_int_func, a, b, n(1), 'Trapezoid method');
+[I] = hw_int_analog(@hw_int_func, a, b, n(2), 'Trapezoid method');
+[I] = hw_int_analog(@hw_int_func, a, b, n(3), 'Trapezoid method');
+[I] = hw_int_analog(@hw_int_func, a, b, n(1), 'Parabola method')
+[I] = hw_int_analog(@hw_int_func, a, b, n(2), 'Parabola method')
+[I] = hw_int_analog(@hw_int_func, a, b, n(3), 'Parabola method')
+%[I] = hw_int_analog(@hw_int_func, a, b, n, ' method')
+%[I] = hw_int_analog(@hw_int_func, a, b, n, ' method')
+
+%========================================================%
 
 
-%---------Functions---------%
-function[f] = hw_int_func(t)
-    w=4;%Hz
-    omega=2*pi*w;
-    f = 1.16*t + 0.13*sin(omega*t) - 0.89*t^2;
+%________________________Functions_______________________%
+function[f] = hw_int_func(x)
+    omega=4;%Hz
+    W=2*pi*omega;
+    f = 1.16*x + 0.13*sin(W*x) - 0.89.*x.*x;
 end
 
 
-function[I] = hw_int_analog(fnc, a, b, n, method)
-    I = fnc
+function[I] = hw_int_analog(fnc, a, b, n, k)
+I = 0;
+x = (a : (b-a)/n : b); 
+shift = 1;
+switch k
+    case 'Left rectangle method'
+        for i = (0+shift:1:n-1+shift)
+            I = I + fnc(x(i))*(x(i+1) - x(i));
+        end 
+    case 'Right rectangle method'        
+        for i = (1+shift:1:n+shift)
+            I = I + fnc(x(i))*(x(i) - x(i-1));
+        end 
+    case 'Central rectangle method'
+        for i = (1+shift:1:n+shift)
+            I = I + fnc((x(i-1) + x(i))/2)*(x(i) - x(i-1));
+        end
+    case 'Trapezoid method'
+        for i = (0+shift:1:n-1+shift)
+           I = I + (fnc(x(i)) + fnc(x(i+1)))*(x(i+1)-x(i))/2;  
+        end
+    case 'Parabola method'
+        int_sum1 = 0;
+        int_sum2 = 0;
+        N = 2*n;
+        h = (b-a)/N;
+        x = (a:h:b);
+        for i = (1:1:n-1)
+            int_sum1 = int_sum1 + fnc(x(2*i + shift));
+        end
+        for i = (1:1:n)
+            int_sum2 = int_sum2 + fnc(x(2*i - 1 + shift));
+        end
+        I = I + (h/3)*(fnc(x(0+shift)) + fnc(x(N)) + 2*int_sum1 + 4*int_sum2);
+    case 'Gauss-Legandre quadrature'
+        
 end
-
+end
+%========================================================%
