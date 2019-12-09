@@ -32,10 +32,12 @@ x3 = (a : (b-a)/n(3) : b);
 [I] = hw_int_analog(@hw_int_func, a, b, n(1), 'Trapezoid method');
 [I] = hw_int_analog(@hw_int_func, a, b, n(2), 'Trapezoid method');
 [I] = hw_int_analog(@hw_int_func, a, b, n(3), 'Trapezoid method');
-[I] = hw_int_analog(@hw_int_func, a, b, n(1), 'Parabola method')
-[I] = hw_int_analog(@hw_int_func, a, b, n(2), 'Parabola method')
-[I] = hw_int_analog(@hw_int_func, a, b, n(3), 'Parabola method')
-%[I] = hw_int_analog(@hw_int_func, a, b, n, ' method')
+[I] = hw_int_analog(@hw_int_func, a, b, n(1), 'Parabola method');
+[I] = hw_int_analog(@hw_int_func, a, b, n(2), 'Parabola method');
+[I] = hw_int_analog(@hw_int_func, a, b, n(3), 'Parabola method');
+[I] = hw_int_analog(@hw_int_func, a, b, n(1), 'Gauss-Legandre quadrature method')
+[I] = hw_int_analog(@hw_int_func, a, b, n(2), 'Gauss-Legandre quadrature method');
+[I] = hw_int_analog(@hw_int_func, a, b, n(3), 'Gauss-Legandre quadrature method');
 %[I] = hw_int_analog(@hw_int_func, a, b, n, ' method')
 
 %========================================================%
@@ -71,20 +73,38 @@ switch k
            I = I + (fnc(x(i)) + fnc(x(i+1)))*(x(i+1)-x(i))/2;  
         end
     case 'Parabola method'
-        int_sum1 = 0;
-        int_sum2 = 0;
+        sum1 = 0;
+        sum2 = 0;
         N = 2*n;
         h = (b-a)/N;
         x = (a:h:b);
         for i = (1:1:n-1)
-            int_sum1 = int_sum1 + fnc(x(2*i + shift));
+            sum1 = sum1 + fnc(x(2*i + shift));
         end
         for i = (1:1:n)
-            int_sum2 = int_sum2 + fnc(x(2*i - 1 + shift));
+            sum2 = sum2 + fnc(x(2*i - 1 + shift));
         end
-        I = I + (h/3)*(fnc(x(0+shift)) + fnc(x(N)) + 2*int_sum1 + 4*int_sum2);
-    case 'Gauss-Legandre quadrature'
-        
-end
+        I = I + (h/3)*(fnc(x(0+shift)) + fnc(x(N)) + 2*sum1 + 4*sum2);
+    case 'Gauss-Legandre quadrature method'
+        I = 0;
+        w(1) = 0.236927;
+        w(2) = 0.478629;
+        w(3) = 0.568889;
+        w(4) = 0.478629;        
+        w(5) = 0.236927;
+        y(1) = -0.90618;
+        y(2) = -0.538469;
+        y(3) = 0;
+        y(4) = 0.538469;
+        y(5) = 0.90618;
+        for k = (0:1:n-1)
+            sum = 0;
+            for j = (1:1:5)
+                sum = sum + w(j)*fnc((x(k+1+shift)-x(k+shift))*y(j)/2 +....
+                    (x(k+shift)+x(k+1+shift))/2);
+            end
+            I = I + ((x(k+1+shift)-x(k+shift))/2)*sum;
+        end
+    end
 end
 %========================================================%
