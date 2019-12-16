@@ -10,9 +10,34 @@ b = 1.5;
 eps = 1e-6;
 n = [10; 100; 1000]';
 N = zeros(3, 7);
+tetta = [1/3, 1/3, 1/3, 1/3, 1/15];
 x1 = (a : (b-a)/n(1) : b); 
 x2 = (a : (b-a)/n(2) : b);
 x3 = (a : (b-a)/n(3) : b);
+meth = ["Left rectangle method", "Right rectangle method", "Central rectangle method", ...
+    "Trapezoid method", "Parabola method"];
+meth1 = ["Left rectangle method", "Right rectangle method", "Central rectangle method", ...
+    "Trapezoid method", "Parabola method", "Gauss-Legandre quadrature method", "Gauss-Kronrod quadrature method"];
+
+%========================================================%
+
+
+%____________________Runge rule__________________________%
+delta2n = [1, 1, 1, 1, 1];
+N0 = 10;
+j = 1;
+while ~(all(delta2n < eps))
+    for i = (1:1:5)
+        [I1] = hw_int_analog(@hw_int_func, a, b, N0, meth(i));
+        [I2] = hw_int_analog(@hw_int_func, a, b, 2*N0, meth(i));
+        delta2n(i) = tetta(i)*abs(I2 - I1);
+    end
+    Delta2n(j, :) = delta2n;
+    j = j + 1;
+    N0 = 2*N0;
+end
+n(4) = N0/2;
+Delta2n;
 %========================================================%
 
 
@@ -22,92 +47,68 @@ x3 = (a : (b-a)/n(3) : b);
 [f3] = hw_int_func(x3);
 
 
-S = zeros(3, 7);
+S = zeros(4, 7);
 S(1, 1) = hw_int_analog(@hw_int_func, a, b, n(1), 'Left rectangle method');
 S(2, 1) = hw_int_analog(@hw_int_func, a, b, n(2), 'Left rectangle method');
 S(3, 1) = hw_int_analog(@hw_int_func, a, b, n(3), 'Left rectangle method');
+S(4, 1) = hw_int_analog(@hw_int_func, a, b, n(4), 'Left rectangle method');
 
 S(1, 2) = hw_int_analog(@hw_int_func, a, b, n(1), 'Right rectangle method');
 S(2, 2) = hw_int_analog(@hw_int_func, a, b, n(2), 'Right rectangle method');
 S(3, 2) = hw_int_analog(@hw_int_func, a, b, n(3), 'Right rectangle method');
+S(4, 2) = hw_int_analog(@hw_int_func, a, b, n(4), 'Right rectangle method');
 
 S(1, 3) = hw_int_analog(@hw_int_func, a, b, n(1), 'Central rectangle method');
 S(2, 3) = hw_int_analog(@hw_int_func, a, b, n(2), 'Central rectangle method');
 S(3, 3) = hw_int_analog(@hw_int_func, a, b, n(3), 'Central rectangle method');
+S(4, 3) = hw_int_analog(@hw_int_func, a, b, n(4), 'Central rectangle method');
 
 S(1, 4) = hw_int_analog(@hw_int_func, a, b, n(1), 'Trapezoid method');
 S(2, 4) = hw_int_analog(@hw_int_func, a, b, n(2), 'Trapezoid method');
 S(3, 4) = hw_int_analog(@hw_int_func, a, b, n(3), 'Trapezoid method');
+S(4, 4) = hw_int_analog(@hw_int_func, a, b, n(4), 'Trapezoid method');
 
 S(1, 5) = hw_int_analog(@hw_int_func, a, b, n(1), 'Parabola method');
 S(2, 5) = hw_int_analog(@hw_int_func, a, b, n(2), 'Parabola method');
 S(3, 5) = hw_int_analog(@hw_int_func, a, b, n(3), 'Parabola method');
+S(4, 5) = hw_int_analog(@hw_int_func, a, b, n(4), 'Parabola method');
 
 S(1, 6) = hw_int_analog(@hw_int_func, a, b, n(1), 'Gauss-Legandre quadrature method');
 S(2, 6) = hw_int_analog(@hw_int_func, a, b, n(2), 'Gauss-Legandre quadrature method');
 S(3, 6) = hw_int_analog(@hw_int_func, a, b, n(3), 'Gauss-Legandre quadrature method');
+S(4, 6) = hw_int_analog(@hw_int_func, a, b, n(4), 'Gauss-Legandre quadrature method');
 
 S(1, 7) = hw_int_analog(@hw_int_func, a, b, n(1), 'Gauss-Kronrod quadrature method');
 S(2, 7) = hw_int_analog(@hw_int_func, a, b, n(2), 'Gauss-Kronrod quadrature method');
-S(3, 7) = hw_int_analog(@hw_int_func, a, b, n(3), 'Gauss-Kronrod quadrature method')
+S(3, 7) = hw_int_analog(@hw_int_func, a, b, n(3), 'Gauss-Kronrod quadrature method');
+S(4, 7) = hw_int_analog(@hw_int_func, a, b, n(4), 'Gauss-Kronrod quadrature method');
+%========================================================%
 
 
-fprintf("Left rectangle  method for N=10\n");
-[I] = hw_int_analog(@hw_int_func, a, b, n(1), 'Left rectangle method');
-fprintf("Left rectangle method for N=100\n");
-[I] = hw_int_analog(@hw_int_func, a, b, n(2), 'Left rectangle method');
-fprintf("Left rectangle method for N=1000\n");
-[I] = hw_int_analog(@hw_int_func, a, b, n(3), 'Left rectangle method');
-fprintf("\n\n\n\n");
-
-fprintf("Right rectangle method for N=10\n");
-[I] = hw_int_analog(@hw_int_func, a, b, n(1), 'Right rectangle method');
-fprintf("Right rectangle method for N=100\n");
-[I] = hw_int_analog(@hw_int_func, a, b, n(2), 'Right rectangle method');
-fprintf("Right rectangle method for N=1000\n");
-[I] = hw_int_analog(@hw_int_func, a, b, n(3), 'Right rectangle method');
-fprintf("\n\n\n\n");
-
-fprintf("Central rectangle method for N=10\n");
-[I] = hw_int_analog(@hw_int_func, a, b, n(1), 'Central rectangle method');
-fprintf("Central rectangle method for N=100\n");
-[I] = hw_int_analog(@hw_int_func, a, b, n(2), 'Central rectangle method');
-fprintf("Central rectangle method for N=1000\n");
-[I] = hw_int_analog(@hw_int_func, a, b, n(3), 'Central rectangle method');
-fprintf("\n\n\n\n");
-
-fprintf("Trapezoid method for N=10\n");
-[I] = hw_int_analog(@hw_int_func, a, b, n(1), 'Trapezoid method');
-fprintf("Trapezoid method for N=100\n");
-[I] = hw_int_analog(@hw_int_func, a, b, n(2), 'Trapezoid method');
-fprintf("Trapezoid method for N=1000\n");
-[I] = hw_int_analog(@hw_int_func, a, b, n(3), 'Trapezoid method');
-fprintf("\n\n\n\n");
-
-fprintf("Parabola method for N=10\n");
-[I] = hw_int_analog(@hw_int_func, a, b, n(1), 'Parabola method');
-fprintf("Trapezoid method for N=100\n");
-[I] = hw_int_analog(@hw_int_func, a, b, n(2), 'Parabola method');
-fprintf("Trapezoid method for N=1000\n");
-[I] = hw_int_analog(@hw_int_func, a, b, n(3), 'Parabola method');
-fprintf("\n\n\n\n");
-
-fprintf("Gauss-Legandre quadrature method for N=10\n");
-[I] = hw_int_analog(@hw_int_func, a, b, n(1), 'Gauss-Legandre quadrature method');
-fprintf("Gauss-Legandre quadrature method for N=100\n");
-[I] = hw_int_analog(@hw_int_func, a, b, n(2), 'Gauss-Legandre quadrature method');
-fprintf("Gauss-Legandre quadrature method for N=1000\n");
-[I] = hw_int_analog(@hw_int_func, a, b, n(3), 'Gauss-Legandre quadrature method');
-fprintf("\n\n\n\n");
-
-fprintf("Gauss-Kronrod quadrature method for N=10\n");
-[I] = hw_int_analog(@hw_int_func, a, b, n(3), 'Gauss-Kronrod quadrature method');
-fprintf("Gauss-Kronrod quadrature method for N=100\n");
-[I] = hw_int_analog(@hw_int_func, a, b, n(3), 'Gauss-Kronrod quadrature method');
-fprintf("Gauss-Kronrod quadrature method for N=1000\n");
-[I] = hw_int_analog(@hw_int_func, a, b, n(3), 'Gauss-Kronrod quadrature method');
-
-
+%_______________________Graphics_________________________%
+figure(1)
+clf;
+subplot(1, 2, 1);
+bar(S);
+title('Integrals for each method');
+grid on;
+grid minor;
+legend('Left rectangle method', 'Right rectangle method', 'Central rectangle method', ...
+    'Trapezoid method', 'Parabola method', 'Gauss-Legandre quadrature method', 'Gauss-Kronrod quadrature method', 'Location', 'NorthEast');
+t = gca;
+t.XTickLabel={'10', '100', '1000', '40960'};
+subplot(1, 2, 2);
+t = 1 : 1 : size(Delta2n, 1);
+plot(t, Delta2n, 'LineWidth', 1.5)
+title('Delta for each method');
+grid on;
+grid minor;
+legend(meth);
+xlim([1, 10]);
+Methods = meth1';
+Integrals = S';
+table(Methods, Integrals)
+fprintf("Number of N by Runge rule is %d\n", n(4));
 %========================================================%
 
 
@@ -124,23 +125,23 @@ I = 0;
 x = (a : (b-a)/n : b); 
 shift = 1;
 switch k
-    case 'Left rectangle method'
+    case "Left rectangle method"
         for i = (0+shift:1:n-1+shift)
             I = I + fnc(x(i))*(x(i+1) - x(i));
         end 
-    case 'Right rectangle method'        
+    case "Right rectangle method"   
         for i = (1+shift:1:n+shift)
             I = I + fnc(x(i))*(x(i) - x(i-1));
         end 
-    case 'Central rectangle method'
+    case "Central rectangle method"
         for i = (1+shift:1:n+shift)
             I = I + fnc((x(i-1) + x(i))/2)*(x(i) - x(i-1));
         end
-    case 'Trapezoid method'
+    case "Trapezoid method"
         for i = (0+shift:1:n-1+shift)
            I = I + (fnc(x(i)) + fnc(x(i+1)))*(x(i+1)-x(i))/2;  
         end
-    case 'Parabola method'
+    case "Parabola method"
         sum1 = 0;
         sum2 = 0;
         N = 2*n;
@@ -153,7 +154,7 @@ switch k
             sum2 = sum2 + fnc(x(2*i - 1 + shift));
         end
         I = I + (h/3)*(fnc(x(0+shift)) + fnc(x(N)) + 2*sum1 + 4*sum2);
-    case 'Gauss-Legandre quadrature method'
+    case "Gauss-Legandre quadrature method"
         I = 0;
         y(1) = -0.90618;
         y(2) = -0.538469;
@@ -173,10 +174,7 @@ switch k
             end
             I = I + ((x(k+1+shift)-x(k+shift))/2)*sum;
         end
-    case 'Gauss-Kronrod quadrature method'
-%         N = 2*n+1;
-%         h = ((b-a)/N);
-%         x = (a:h:b);
+    case "Gauss-Kronrod quadrature method"
         I = 0;
         y = [-0.991455371120813, -0.949107912342759, -0.864864423359769, -0.741531185599394, -0.586087235467691, -0.405845151377397, -0.207784955007898, 0, 0.207784955007898, 0.405845151377397, 0.586087235467691, 0.741531185599394, 0.864864423359769, 0.949107912342759, 0.991455371120813];
         w = [0.022935322010529, 0.063092092629979, 0.104790010322250, 0.140653259715525, 0.169004726639267, 0.190350578064785, 0.204432940075298, 0.209482141084728, 0.204432940075298, 0.190350578064785, 0.169004726639267, 0.140653259715525, 0.104790010322250, 0.063092092629979, 0.022935322010529];
@@ -188,6 +186,6 @@ switch k
             end
             I = I + ((x(k+1+shift)-x(k+shift))/2)*sum;
         end
-    end
+end
 end
 %========================================================%
